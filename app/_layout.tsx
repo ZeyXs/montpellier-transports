@@ -1,37 +1,69 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import 'react-native-gesture-handler';
+import { View, Image, SafeAreaView } from 'react-native';
+import { Drawer } from 'expo-router/drawer';
+import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import MTDrawerContent from '@/components/MTDrawerContent';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import '../global.css';
+import { Fragment } from 'react';
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+export default function Layout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView className="flex-1">
+      <Drawer
+        drawerContent={MTDrawerContent}
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#004295',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          drawerLabelStyle: { marginLeft: -16 },
+        }}
+      >
+        <Drawer.Screen
+          name="index"
+          options={{
+            drawerLabel: 'Menu principal',
+            headerTitle: 'Montpellier Transports',
+            drawerIcon: ({ size, color }) => (
+              <FontAwesome6 name="house" size={size} color={color} />
+            ),
+          }}
+        />
+
+        <Drawer.Screen
+          name="itinerary"
+          options={{
+            drawerActiveTintColor: '#ffc219',
+            drawerActiveBackgroundColor: '#fff0cf',
+            drawerLabel: 'Itinéraires',
+            headerTitle: 'Itinéraires',
+            drawerIcon: ({ size, color }) => (
+              <FontAwesome6 name="map-location-dot" size={size} color={color} />
+            ),
+          }}
+        />
+
+        <Drawer.Screen
+          name="realtime"
+          options={{
+            drawerActiveTintColor: '#925eff',
+            drawerActiveBackgroundColor: '#e6dbff',
+            drawerLabel: 'Temps réel',
+            headerTitle: 'Temps réel',
+            drawerIcon: ({ size, color }) => (
+              <MaterialCommunityIcons name="clock" size={size} color={color} />
+            ),
+          }}
+        />
+      </Drawer>
+    </GestureHandlerRootView>
   );
 }
