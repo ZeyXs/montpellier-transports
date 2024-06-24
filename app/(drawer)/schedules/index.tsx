@@ -17,14 +17,17 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import NavetteGareIcon from '@/components/icons/NavetteGareIcon';
 import NavetteOvalieIcon from '@/components/icons/NavetteOvalieIcon';
 import NavetteAmigoIcon from '@/components/icons/NavetteAmigoIcon';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function RealTime() {
-  const t = [];
+export default function LinesPage() {
 
   const [tramLines, setTramLines] = useState([]);
   const [urbanBuses, setUrbanBuses] = useState([]);
   const [extraUrbanBuses, setExtraUrbanBuses] = useState([]);
+  const [touchableDisabled, setTouchableDisabled] = useState(false);
+
+  const navigation = useNavigation();
 
   const fetchLines = async () => {
     try {
@@ -50,6 +53,19 @@ export default function RealTime() {
       console.error('Error fetching lines:', error);
     }
   };
+
+  const handleNavigation = (id: number) => {
+    router.push({
+      pathname: 'schedules/[id]',
+      params: { id },
+    });
+  }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', (e) => {
+      console.log("test", e)
+    });
+  }, [navigation]), 
 
   useEffect(() => {
     fetchLines();
@@ -85,10 +101,15 @@ export default function RealTime() {
           </View>
           <View className="flex flex-wrap flex-row p-2 gap-2">
             {tramLines.map((tram: any, i) => (
-              <Pressable key={i} onPress={() => router.push({
-                pathname: 'schedules/[id]',
-                params: { id: tram.id }
-              })}>
+              <TouchableOpacity
+                key={i}
+                onPress={() =>
+                  router.push({
+                    pathname: 'schedules/[id]',
+                    params: { id: tram.id },
+                  })
+                }
+              >
                 <View
                   className="flex justify-center items-center p-2 w-14 rounded-b-lg rounded-tl-lg"
                   style={{
@@ -99,7 +120,7 @@ export default function RealTime() {
                     {tram.numero}
                   </Text>
                 </View>
-              </Pressable>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -113,26 +134,36 @@ export default function RealTime() {
           </View>
           <View className="flex flex-wrap flex-row p-2 gap-2">
             {urbanBuses.map((tram: any, i) => (
-              <View
+              <TouchableOpacity
                 key={i}
-                className="flex justify-center items-center text-center p-2 w-12 h-12 rounded-full"
-                style={{
-                  backgroundColor: tram.couleur,
-                }}
+                onPress={() =>
+                  router.push({
+                    pathname: 'schedules/[id]',
+                    params: { id: tram.id },
+                  })
+                }
               >
-                {tram.id != 13 ? (
-                  <Text className="text-white text-2xl font-bold">
-                    {tram.numero}
-                  </Text>
-                ) : (
-                  <MaterialCommunityIcons
-                    name="rotate-3d-variant"
-                    className=""
-                    size={30}
-                    color="white"
-                  />
-                )}
-              </View>
+                <View
+                  key={i}
+                  className="flex justify-center items-center text-center p-2 w-12 h-12 rounded-full"
+                  style={{
+                    backgroundColor: tram.couleur,
+                  }}
+                >
+                  {tram.id != 13 ? (
+                    <Text className="text-white text-2xl font-bold">
+                      {tram.numero}
+                    </Text>
+                  ) : (
+                    <MaterialCommunityIcons
+                      name="rotate-3d-variant"
+                      className="right-[1px] bottom-[1px]"
+                      size={30}
+                      color="white"
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -146,17 +177,27 @@ export default function RealTime() {
           </View>
           <View className="flex flex-wrap flex-row p-2 gap-2">
             {extraUrbanBuses.map((tram: any, i) => (
-              <View
+              <TouchableOpacity
                 key={i}
-                className="flex justify-center items-center p-2 w-12 rounded-lg"
-                style={{
-                  backgroundColor: tram.couleur,
-                }}
+                onPress={() =>
+                  router.push({
+                    pathname: 'schedules/[id]',
+                    params: { id: tram.id },
+                  })
+                }
               >
-                <Text className="text-white text-2xl font-bold">
-                  {tram.numero === 'La Navette' ? '13' : tram.numero}
-                </Text>
-              </View>
+                <View
+                  key={i}
+                  className="flex justify-center items-center p-2 w-12 rounded-lg"
+                  style={{
+                    backgroundColor: tram.couleur,
+                  }}
+                >
+                  <Text className="text-white text-2xl font-bold">
+                    {tram.numero === 'La Navette' ? '13' : tram.numero}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -186,7 +227,7 @@ export default function RealTime() {
             <View className="flex flex-row justify-center items-center py-2 px-6 h-12 bg-[#004a98] rounded-full">
               <NavetteOvalieIcon width={25} height={25} color="white" />
               <Text className="ml-3 text-white text-xl mt-0 font-bold text-center">
-                Navette Gare
+                Navette Ovalie
               </Text>
             </View>
 

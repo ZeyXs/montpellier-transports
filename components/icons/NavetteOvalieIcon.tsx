@@ -1,6 +1,7 @@
 import Svg, { SvgProps, Path } from 'react-native-svg';
 
 const SvgComponent = (props: SvgProps) => (
+  
   <Svg viewBox="-10 0 1289 1265" {...props}>
     <Path
       fill="currentColor"
