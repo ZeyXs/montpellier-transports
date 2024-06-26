@@ -37,7 +37,7 @@ export default function Layout() {
       <Stack.Screen
         name="[id]"
         options={{
-          headerTitle: 'Les ids',
+          headerTitle: '',
           headerTintColor: 'white',
           headerStyle: { backgroundColor: '#004295' },
           headerBackButtonMenuEnabled: false,

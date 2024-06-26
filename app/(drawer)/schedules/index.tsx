@@ -19,9 +19,9 @@ import NavetteOvalieIcon from '@/components/icons/NavetteOvalieIcon';
 import NavetteAmigoIcon from '@/components/icons/NavetteAmigoIcon';
 import { router, useNavigation } from 'expo-router';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import LineIcon from '@/components/icons/LineIcon';
 
 export default function LinesPage() {
-
   const [tramLines, setTramLines] = useState([]);
   const [urbanBuses, setUrbanBuses] = useState([]);
   const [extraUrbanBuses, setExtraUrbanBuses] = useState([]);
@@ -59,17 +59,16 @@ export default function LinesPage() {
       pathname: 'schedules/[id]',
       params: { id },
     });
-  }
+  };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', (e) => {
-      console.log("test", e)
+      console.log('test', e);
     });
-  }, [navigation]), 
-
-  useEffect(() => {
-    fetchLines();
-  }, []);
+  }, [navigation]),
+    useEffect(() => {
+      fetchLines();
+    }, []);
 
   return (
     <ScrollView
@@ -110,16 +109,7 @@ export default function LinesPage() {
                   })
                 }
               >
-                <View
-                  className="flex justify-center items-center p-2 w-14 rounded-b-lg rounded-tl-lg"
-                  style={{
-                    backgroundColor: tram.couleur,
-                  }}
-                >
-                  <Text className="text-white text-2xl font-bold">
-                    {tram.numero}
-                  </Text>
-                </View>
+                <LineIcon lineId={tram.id} />
               </TouchableOpacity>
             ))}
           </View>
@@ -143,26 +133,7 @@ export default function LinesPage() {
                   })
                 }
               >
-                <View
-                  key={i}
-                  className="flex justify-center items-center text-center p-2 w-12 h-12 rounded-full"
-                  style={{
-                    backgroundColor: tram.couleur,
-                  }}
-                >
-                  {tram.id != 13 ? (
-                    <Text className="text-white text-2xl font-bold">
-                      {tram.numero}
-                    </Text>
-                  ) : (
-                    <MaterialCommunityIcons
-                      name="rotate-3d-variant"
-                      className="right-[1px] bottom-[1px]"
-                      size={30}
-                      color="white"
-                    />
-                  )}
-                </View>
+                <LineIcon lineId={tram.id} />
               </TouchableOpacity>
             ))}
           </View>
@@ -186,17 +157,7 @@ export default function LinesPage() {
                   })
                 }
               >
-                <View
-                  key={i}
-                  className="flex justify-center items-center p-2 w-12 rounded-lg"
-                  style={{
-                    backgroundColor: tram.couleur,
-                  }}
-                >
-                  <Text className="text-white text-2xl font-bold">
-                    {tram.numero === 'La Navette' ? '13' : tram.numero}
-                  </Text>
-                </View>
+                <LineIcon lineId={tram.id} />
               </TouchableOpacity>
             ))}
           </View>
@@ -216,20 +177,24 @@ export default function LinesPage() {
           </View>
           <View className="flex flex-wrap flex-row p-2 gap-2">
             {/* Navette Gare */}
-            <View className="flex flex-row justify-center items-center py-2 px-6 h-12 bg-[#004496] rounded-full">
-              <NavetteGareIcon width={20} height={20} color="white" />
-              <Text className="ml-3 text-white text-xl mt-0 font-bold text-center">
-                Navette Gare
-              </Text>
-            </View>
+            <TouchableOpacity onPress={() => handleNavigation(50)}>
+              <View className="flex flex-row justify-center items-center py-2 px-6 h-12 bg-[#004496] rounded-full">
+                <NavetteGareIcon width={20} height={20} color="white" />
+                <Text className="ml-3 text-white text-xl mt-0 font-bold text-center">
+                  Navette Gare
+                </Text>
+              </View>
+            </TouchableOpacity>
 
             {/* Navette Ovalie */}
-            <View className="flex flex-row justify-center items-center py-2 px-6 h-12 bg-[#004a98] rounded-full">
-              <NavetteOvalieIcon width={25} height={25} color="white" />
-              <Text className="ml-3 text-white text-xl mt-0 font-bold text-center">
-                Navette Ovalie
-              </Text>
-            </View>
+            <TouchableOpacity onPress={() => handleNavigation(96)}>
+              <View className="flex flex-row justify-center items-center py-2 px-6 h-12 bg-[#004a98] rounded-full">
+                <NavetteOvalieIcon width={25} height={25} color="white" />
+                <Text className="ml-3 text-white text-xl mt-0 font-bold text-center">
+                  Navette Ovalie
+                </Text>
+              </View>
+            </TouchableOpacity>
 
             {/* Navette Amigo */}
             <View className="flex flex-row justify-center items-center py-2 px-4 h-12 bg-[#221f57] rounded-lg">
