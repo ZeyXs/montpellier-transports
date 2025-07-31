@@ -1,79 +1,64 @@
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  ScrollView,
-  Pressable,
-} from 'react-native';
-import { useEffect, useState } from 'react';
-import { Lines } from '@/constants/Lines';
-import axios from 'axios';
+import { View, Text, TouchableHighlight, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { Lines } from "@/constants/Lines";
+import apiClient from "@/util/apiClient";
 
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-import NavetteGareIcon from '@/components/icons/NavetteGareIcon';
-import NavetteOvalieIcon from '@/components/icons/NavetteOvalieIcon';
-import NavetteAmigoIcon from '@/components/icons/NavetteAmigoIcon';
-import { router, useNavigation } from 'expo-router';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import LineIcon from '@/components/icons/LineIcon';
+import NavetteGareIcon from "@/components/icons/NavetteGareIcon";
+import NavetteOvalieIcon from "@/components/icons/NavetteOvalieIcon";
+import NavetteAmigoIcon from "@/components/icons/NavetteAmigoIcon";
+import { router, useNavigation } from "expo-router";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import LineIcon from "@/components/icons/LineIcon";
 
 export default function LinesPage() {
   const [tramLines, setTramLines] = useState([]);
   const [urbanBuses, setUrbanBuses] = useState([]);
   const [extraUrbanBuses, setExtraUrbanBuses] = useState([]);
-  const [touchableDisabled, setTouchableDisabled] = useState(false);
 
   const navigation = useNavigation();
 
   const fetchLines = async () => {
     try {
-      const response = await axios.get(
-        'https://cartographie.tam-voyages.com/gtfs/lignes'
-      );
-      const data = response.data;
+      const response = await apiClient.get("/lignes");
+      const { data } = response;
 
-      const trams = data.filter((line: any) => line.type === 'tramway');
+      const trams = data.filter((line: any) => line.type === "tramway");
       const urbanBuses = data.filter(
         (line: any) =>
-          line.type === 'bus' && Lines.urbanIds.includes(parseInt(line.id))
+          line.type === "bus" && Lines.urbanIds.includes(parseInt(line.id))
       );
       const extraUrbanBuses = data.filter(
         (line: any) =>
-          line.type === 'bus' && Lines.extraUrbanIds.includes(parseInt(line.id))
+          line.type === "bus" && Lines.extraUrbanIds.includes(parseInt(line.id))
       );
 
       setTramLines(trams);
       setUrbanBuses(urbanBuses);
       setExtraUrbanBuses(extraUrbanBuses);
     } catch (error) {
-      console.error('Error fetching lines:', error);
+      console.error("Error fetching lines:", error);
     }
   };
 
   const handleNavigation = (id: number) => {
     router.push({
-      pathname: 'schedules/[id]',
+      pathname: "/schedules/[id]",
       params: { id },
     });
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', (e) => {
-      console.log('test', e);
-    });
-  }, [navigation]),
-    useEffect(() => {
-      fetchLines();
-    }, []);
+    fetchLines();
+  }, []);
 
   return (
     <ScrollView
       className="flex flex-col"
-      contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
+      contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
     >
       {/* Button to select a specific stop */}
       <TouchableHighlight
@@ -104,7 +89,7 @@ export default function LinesPage() {
                 key={i}
                 onPress={() =>
                   router.push({
-                    pathname: 'schedules/[id]',
+                    pathname: "/schedules/[id]",
                     params: { id: tram.id },
                   })
                 }
@@ -128,7 +113,7 @@ export default function LinesPage() {
                 key={i}
                 onPress={() =>
                   router.push({
-                    pathname: 'schedules/[id]',
+                    pathname: "/schedules/[id]",
                     params: { id: tram.id },
                   })
                 }
@@ -152,7 +137,7 @@ export default function LinesPage() {
                 key={i}
                 onPress={() =>
                   router.push({
-                    pathname: 'schedules/[id]',
+                    pathname: "/schedules/[id]",
                     params: { id: tram.id },
                   })
                 }
